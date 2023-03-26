@@ -47,10 +47,6 @@ constexpr int MAXADDRS = 35;
 #define ESTIMATED_LINELEN	32
 #define HCFILE_ALLOC_SIZE	256
 
-/* From sethostent.c */
-#define ALIGNBYTES	(sizeof(uintptr_t) - 1)
-#define ALIGN(p)	(((uintptr_t)(p) + ALIGNBYTES) &~ ALIGNBYTES)
-
 /*
  * Host cache entry for hcfile.c_data.
  * Offsets are into hcfile.h_data.
@@ -500,8 +496,7 @@ int hc_gethtbyname(const char *host, int af, struct getnamaddr *info)
                 if (naliases >= MAXALIASES)
                     goto nospc;
             }
-            // NOLINTNEXTLINE: Allow casting to pointer
-            aligned = (char *)ALIGN(info->buf);
+            aligned = align_ptr(info->buf);
             if (info->buf != aligned) {
                 if ((ptrdiff_t)info->buflen < (aligned - info->buf))
                     goto nospc;
