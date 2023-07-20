@@ -500,6 +500,7 @@ int hc_gethtbyname(const char *host, int af, struct getnamaddr *info)
                 if (naliases >= MAXALIASES)
                     goto nospc;
             }
+            // NOLINTNEXTLINE: Allow casting to pointer
             aligned = (char *)ALIGN(info->buf);
             if (info->buf != aligned) {
                 if ((ptrdiff_t)info->buflen < (aligned - info->buf))
